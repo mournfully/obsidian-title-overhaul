@@ -1,5 +1,6 @@
 import { Plugin } from 'obsidian';
 import { loadSettings, saveSettings, settings, SettingsTab } from './settings';
+import { fileResolver } from './resolver'
 
 export default class PreferHeadingsPlugin extends Plugin {
 
@@ -7,9 +8,18 @@ export default class PreferHeadingsPlugin extends Plugin {
 		await loadSettings(this)
 		this.addSettingTab(new SettingsTab(this))
 
+		this.addCommand({
+			id: 'resolve-file-header',
+			name: 'PreferHeadings: Run on active file for testing',
+			callback: () => {
+				fileResolver()
+			}
+		})
+
 	}
 
 	async onunload(): Promise<void> {
 
 	}
 }
+
