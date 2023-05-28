@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { loadSettings, saveSettings, settings, SettingsTab } from './settings';
+import { loadSettings, SettingsTab } from './settings';
 import { fileResolver } from './resolver'
 
 import { fileResolver } from './testing'

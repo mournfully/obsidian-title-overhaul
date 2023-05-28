@@ -3,6 +3,8 @@ import type PreferHeadingsPlugin from './main'
 
 // Init setting variable type
 export interface PreferHeadingsSettings {
+  useDatabase: boolean
+
   replaceExplorer: boolean
   replaceGraph: boolean
   replaceSuggest: boolean
@@ -22,7 +24,20 @@ export class SettingsTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl('h2', { text: 'PreferHeadings' })
+    containerEl.createEl('h2', { text: 'HeadingsOverhaul' })
+
+    new Setting(containerEl).setName('Behavior').setHeading()
+
+    // useDatabase
+    new Setting(containerEl)
+      .setName('Save index to cache')
+      .setDesc('Enable caching to speed up indexing time.')
+      .addToggle(toggle =>
+        toggle.setValue(settings.useDatabase).onChange(async v => {
+          settings.useDatabase = v
+          await saveSettings(this.plugin)
+        })
+      )
 
     new Setting(containerEl).setName('Replace displayed titles with first heading').setHeading()
 
@@ -80,6 +95,8 @@ export class SettingsTab extends PluginSettingTab {
 
 // Set default setting values
 export const DEFAULT_SETTINGS: PreferHeadingsSettings = {
+  useDatabase: true,
+
   replaceExplorer: true,
   replaceGraph: true,
   replaceSuggest: true,
