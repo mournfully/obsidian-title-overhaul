@@ -11,4 +11,20 @@ export async function fileResolver() {
 
 }
 
+export async function cacheResolver() {
+
+    const file = app.workspace.getActiveFile()
+    let output = await cacheManager.getFromLiveCache(file!.path)
+    console.log(output)
+
+}
+
+export async function allCacheResolver() {
+
+    const files = app.vault.getMarkdownFiles()	
+    for (let i = 0; i < files.length; i++) {
+        let output = await cacheManager.getFromLiveCache(files[i].path)
+        console.log(output)
+    }
+
 }
