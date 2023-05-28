@@ -21,3 +21,37 @@ export async function indexDocument(path: string): Promise<IndexedDocument> {
         heading: heading as string,
     }
 }
+
+class HeadingsOverhaulCache {
+
+    private liveCache: Map<string, IndexedDocument> = new Map()
+
+    public async addToLiveCache(path: string): Promise<void> {
+        try {
+            const file = await indexDocument(path)
+            if (!file.path) {
+                console.error(`Skipping addToLiveCache for "${path}" because of missing IndexedDocument.path`)
+                return
+            }
+            this.liveCache.set(path, file)
+        } catch (error) {
+            console.warn(`Failed to execute addToLiveCache for "${path}"`)
+            this.liveCache.delete(path)
+        }
+    }
+
+    public removeFromLiveCache(path: string): void {
+        this.liveCache.delete(path)
+    }
+
+    public async getFromLiveCache(path: string): Promise<IndexedDocument> {
+        if (!this.liveCache.has(path)) {
+            await this.addToLiveCache(path)
+        }
+
+        return this.liveCache.get(path)!
+    }
+
+}
+
+export const cacheManager = new HeadingsOverhaulCache()
