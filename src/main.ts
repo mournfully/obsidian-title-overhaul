@@ -1,6 +1,7 @@
 import { Plugin } from 'obsidian';
 import { loadSettings, SettingsTab } from './settings';
 import { cacheManager } from './cache'
+import { isFileIndexable } from './utils'
 
 import { fileResolver, cacheResolver, allCacheResolver } from './testing'
 
@@ -34,6 +35,35 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 			}
 		})
 
+		app.workspace.onLayoutReady(async () => {
+			this.registerEvent(
+				this.app.vault.on('delete', file => {
+					if (isFileIndexable(file.path)) {
+						cacheManager.removeFromLiveCache(file.path)
+					} 
+				})
+			)
+
+			this.registerEvent(
+				this.app.vault.on('modify', async file => {
+					if (isFileIndexable(file.path)) {
+						await cacheManager.addToLiveCache(file.path)
+					}
+				})
+			)
+
+			this.registerEvent(
+				this.app.vault.on('rename', async (file, oldFilePath) => {
+					if (isFileIndexable(file.path)) {
+						cacheManager.removeFromLiveCache(oldFilePath)
+						cacheManager.addToLiveCache(file.path)
+					}
+				})
+			)
+
+			await this.populateIndex()
+		})
+
 	}
 
 	async onunload(): Promise<void> {
@@ -47,4 +77,3 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 		}
 	}
 }
-
