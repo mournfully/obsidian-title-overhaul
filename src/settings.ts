@@ -24,7 +24,20 @@ export class SettingsTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl('h2', { text: 'PreferHeadings' })
+    containerEl.createEl('h2', { text: 'HeadingsOverhaul' })
+
+    new Setting(containerEl).setName('Behavior').setHeading()
+
+    // useDatabase
+    new Setting(containerEl)
+      .setName('Save index to cache')
+      .setDesc('Enable caching to speed up indexing time.')
+      .addToggle(toggle =>
+        toggle.setValue(settings.useDatabase).onChange(async v => {
+          settings.useDatabase = v
+          await saveSettings(this.plugin)
+        })
+      )
 
     new Setting(containerEl).setName('Replace displayed titles with first heading').setHeading()
 
@@ -100,3 +113,4 @@ export async function loadSettings(plugin: Plugin): Promise<void> {
 export async function saveSettings(plugin: Plugin): Promise<void> {
   await plugin.saveData(settings)
 }
+
