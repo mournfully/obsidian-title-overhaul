@@ -1,6 +1,6 @@
 import { Plugin } from 'obsidian';
 import { loadSettings, SettingsTab } from './settings';
-import { fileResolver } from './resolver'
+import { cacheManager } from './cache'
 
 import { fileResolver } from './testing'
 
