@@ -4,7 +4,7 @@ import { fileResolver } from './resolver'
 
 import { fileResolver } from './testing'
 
-export default class PreferHeadingsPlugin extends Plugin {
+export default class HeadingsOverhaulPlugin extends Plugin {
 
 	async onload(): Promise<void> {
 		await loadSettings(this)

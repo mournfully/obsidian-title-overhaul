@@ -1,6 +1,6 @@
 {
-	"id": "replace-title-with-header",
-	"name": "Prefer Headings over Title",
+	"id": "heading-overhaul",
+	"name": "Overhaul Headings As Title",
 	"version": "0.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "",

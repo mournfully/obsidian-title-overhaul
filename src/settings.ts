@@ -1,8 +1,10 @@
 import { Plugin, PluginSettingTab, Setting } from 'obsidian'
-import type PreferHeadingsPlugin from './main'
+import type HeadingsOverhaulPlugin from './main'
 
 // Init setting variable type
-export interface PreferHeadingsSettings {
+export interface HeadingsOverhaulSettings {
+  useDatabase: boolean
+
   replaceExplorer: boolean
   replaceGraph: boolean
   replaceSuggest: boolean
@@ -11,9 +13,9 @@ export interface PreferHeadingsSettings {
 }
 
 export class SettingsTab extends PluginSettingTab {
-  plugin: PreferHeadingsPlugin
+  plugin: HeadingsOverhaulPlugin
 
-  constructor(plugin: PreferHeadingsPlugin) {
+  constructor(plugin: HeadingsOverhaulPlugin) {
     super(app, plugin)
     this.plugin = plugin
   }
@@ -79,15 +81,17 @@ export class SettingsTab extends PluginSettingTab {
 }
 
 // Set default setting values
-export const DEFAULT_SETTINGS: PreferHeadingsSettings = {
-  replaceExplorer: true,
-  replaceGraph: true,
-  replaceSuggest: true,
-  replaceTabs: true,
-  replaceBacklink: true,
+export const DEFAULT_SETTINGS: HeadingsOverhaulSettings = {
+  useDatabase: false,
+
+  replaceExplorer: false,
+  replaceGraph: false,
+  replaceSuggest: false,
+  replaceTabs: false,
+  replaceBacklink: false,
 } as const
 
-export let settings = Object.assign({}, DEFAULT_SETTINGS) as PreferHeadingsSettings
+export let settings = Object.assign({}, DEFAULT_SETTINGS) as HeadingsOverhaulSettings
 
 export async function loadSettings(plugin: Plugin): Promise<void> {
   settings = Object.assign({}, DEFAULT_SETTINGS, await plugin.loadData())
