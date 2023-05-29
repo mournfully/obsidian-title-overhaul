@@ -6,10 +6,10 @@ import { setTabTitles, setExplorerItemTitles } from './replace'
 export interface HeadingsOverhaulSettings {
   useDatabase: boolean
 
+  setTabTitles: boolean
   replaceExplorer: boolean
   replaceGraph: boolean
   replaceSuggest: boolean
-  replaceTabs: boolean
   replaceBacklink: boolean
 }
 
@@ -42,6 +42,17 @@ export class SettingsTab extends PluginSettingTab {
 
     new Setting(containerEl).setName('Replace displayed titles with first heading').setHeading()
 
+    // replaceTabs
+    new Setting(containerEl)
+      .setName('replaceTabs')
+      .addToggle(toggle =>
+        toggle.setValue(settings.setTabTitles).onChange(async v => {
+          settings.setTabTitles = v
+          setTabTitles(settings.setTabTitles, false, null)
+          await saveSettings(this.plugin)
+        })
+      )
+
     // replaceExplorer
     new Setting(containerEl)
       .setName('replaceExplorer')
@@ -73,17 +84,6 @@ export class SettingsTab extends PluginSettingTab {
         })
       )
 
-      // replaceTabs
-      new Setting(containerEl)
-      .setName('replaceTabs')
-      .addToggle(toggle =>
-        toggle.setValue(settings.replaceTabs).onChange(async v => {
-          settings.replaceTabs = v
-          setTabTitles(settings.replaceTabs, false, null)
-          await saveSettings(this.plugin)
-        })
-      )
-
       // replaceBacklink
       new Setting(containerEl)
       .setName('replaceBacklink')
@@ -100,10 +100,10 @@ export class SettingsTab extends PluginSettingTab {
 export const DEFAULT_SETTINGS: HeadingsOverhaulSettings = {
   useDatabase: false,
 
+  setTabTitles: false,
   replaceExplorer: false,
   replaceGraph: false,
   replaceSuggest: false,
-  replaceTabs: false,
   replaceBacklink: false,
 } as const
 
