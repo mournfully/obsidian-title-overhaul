@@ -1,5 +1,6 @@
 import { Plugin, PluginSettingTab, Setting } from 'obsidian'
 import type HeadingsOverhaulPlugin from './main'
+import { setTabTitles } from './replace'
 
 // Init setting variable type
 export interface HeadingsOverhaulSettings {
@@ -77,6 +78,7 @@ export class SettingsTab extends PluginSettingTab {
       .addToggle(toggle =>
         toggle.setValue(settings.replaceTabs).onChange(async v => {
           settings.replaceTabs = v
+          setTabTitles(settings.replaceTabs, false, null)
           await saveSettings(this.plugin)
         })
       )
