@@ -3,7 +3,7 @@ import { settings, loadSettings, SettingsTab } from './settings';
 import { cacheManager } from './cache'
 import { isFileIndexable } from './utils'
 
-import { setTabTitles } from './replace'
+import { setTabTitles, setExplorerItemTitles } from './replace'
 import { fileResolver, cacheResolver, allCacheResolver } from './testing'
 
 export default class HeadingsOverhaulPlugin extends Plugin {
@@ -97,6 +97,7 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 
 	async onunload(): Promise<void> {
 		setTabTitles(false, false, null)
+		setExplorerItemTitles(false)
 	}
 
 	private async populateIndex(): Promise<void> {
