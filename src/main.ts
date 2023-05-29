@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Plugin, TAbstractFile } from 'obsidian';
 import { settings, loadSettings, SettingsTab } from './settings';
 import { cacheManager } from './cache'
 import { isFileIndexable } from './utils'
@@ -47,45 +47,36 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 
 			this.registerEvent(
 				this.app.vault.on('modify', async file => {
-					if (isFileIndexable(file.path)) {
-						if (settings.replaceTabs) {
-							await cacheManager.addToLiveCache(file.path)
-							await setTabTitles(true, true, file.path)
-						}
-					}
+					this.reloadTabTitle(file)
 				})
 			)
 
 			// https://gist.github.com/shabegom/d10af3183d046930ab9d6e8343088f48
 			this.registerEvent(
 				this.app.metadataCache.on('changed', async file => {
-					if (isFileIndexable(file.path)) {
-						if (settings.replaceTabs) {
-							await cacheManager.addToLiveCache(file.path)
-							await setTabTitles(true, true, file.path)
-						}
-					}
+					this.reloadTabTitle(file)
 				})
 			)
 
-			this.registerEvent(
-				this.app.vault.on('rename', async (file, oldFilePath) => {
-					if (isFileIndexable(file.path)) {
-						cacheManager.removeFromLiveCache(oldFilePath)
-						cacheManager.addToLiveCache(file.path)
-					}
-				})
-			)
-			
 			this.registerEvent(
 				this.app.workspace.on('layout-change', () => {
-
+					let file = app.workspace.getActiveFile()
+					if (file !== null) this.reloadTabTitle(file)
 				})
 			)
 
 			this.registerEvent(
 				this.app.workspace.on('active-leaf-change', () => {
 					
+				})
+			)
+			
+			this.registerEvent(
+				this.app.vault.on('rename', async (file, oldFilePath) => {
+					if (isFileIndexable(file.path)) {
+						cacheManager.removeFromLiveCache(oldFilePath)
+						cacheManager.addToLiveCache(file.path)
+					}
 				})
 			)
 
@@ -104,6 +95,13 @@ export default class HeadingsOverhaulPlugin extends Plugin {
     	const files = app.vault.getMarkdownFiles()
 		for (let i = 0; i < files.length; i++) {
 		    await cacheManager.addToLiveCache(files[i].path)
+		}
+	}
+
+	private async reloadTabTitle(file: TAbstractFile): Promise<void> {
+		if (settings.replaceTabs && isFileIndexable(file.path)) {
+			await cacheManager.addToLiveCache(file.path)
+			await setTabTitles(true, true, file.path)
 		}
 	}
 }
