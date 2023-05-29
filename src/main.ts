@@ -1,8 +1,9 @@
 import { Plugin } from 'obsidian';
-import { loadSettings, SettingsTab } from './settings';
+import { settings, loadSettings, SettingsTab } from './settings';
 import { cacheManager } from './cache'
 import { isFileIndexable } from './utils'
 
+import { setTabTitles } from './replace'
 import { fileResolver, cacheResolver, allCacheResolver } from './testing'
 
 export default class HeadingsOverhaulPlugin extends Plugin {
@@ -47,7 +48,10 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 			this.registerEvent(
 				this.app.vault.on('modify', async file => {
 					if (isFileIndexable(file.path)) {
+						if (settings.replaceTabs) {
 						await cacheManager.addToLiveCache(file.path)
+							await setTabTitles(true, true, file.path)
+						}
 					}
 				})
 			)
@@ -62,12 +66,13 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 			)
 
 			await this.populateIndex()
+			if (settings.replaceTabs) await setTabTitles(true, false, null)
 		})
 
 	}
 
 	async onunload(): Promise<void> {
-		
+		setTabTitles(false, false, null)
 	}
 
 	private async populateIndex(): Promise<void> {
