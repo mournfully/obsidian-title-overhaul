@@ -49,7 +49,19 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 				this.app.vault.on('modify', async file => {
 					if (isFileIndexable(file.path)) {
 						if (settings.replaceTabs) {
-						await cacheManager.addToLiveCache(file.path)
+							await cacheManager.addToLiveCache(file.path)
+							await setTabTitles(true, true, file.path)
+						}
+					}
+				})
+			)
+
+			// https://gist.github.com/shabegom/d10af3183d046930ab9d6e8343088f48
+			this.registerEvent(
+				this.app.metadataCache.on('changed', async file => {
+					if (isFileIndexable(file.path)) {
+						if (settings.replaceTabs) {
+							await cacheManager.addToLiveCache(file.path)
 							await setTabTitles(true, true, file.path)
 						}
 					}
@@ -64,11 +76,23 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 					}
 				})
 			)
+			
+			this.registerEvent(
+				this.app.workspace.on('layout-change', () => {
+
+				})
+			)
+
+			this.registerEvent(
+				this.app.workspace.on('active-leaf-change', () => {
+					
+				})
+			)
 
 			await this.populateIndex()
 			if (settings.replaceTabs) await setTabTitles(true, false, null)
 		})
-
+		
 	}
 
 	async onunload(): Promise<void> {
