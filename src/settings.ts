@@ -95,13 +95,13 @@ export class SettingsTab extends PluginSettingTab {
 
 // Set default setting values
 export const DEFAULT_SETTINGS: HeadingsOverhaulSettings = {
-  useDatabase: true,
+  useDatabase: false,
 
-  replaceExplorer: true,
-  replaceGraph: true,
-  replaceSuggest: true,
-  replaceTabs: true,
-  replaceBacklink: true,
+  replaceExplorer: false,
+  replaceGraph: false,
+  replaceSuggest: false,
+  replaceTabs: false,
+  replaceBacklink: false,
 } as const
 
 export let settings = Object.assign({}, DEFAULT_SETTINGS) as HeadingsOverhaulSettings
