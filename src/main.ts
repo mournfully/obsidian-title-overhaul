@@ -1,10 +1,11 @@
-import { Plugin, TAbstractFile } from 'obsidian';
+import { Plugin } from 'obsidian';
 import { settings, loadSettings, SettingsTab } from './settings';
 import { cacheManager } from './cache'
 import { isFileIndexable } from './utils'
 
 import { setTabTitles, setExplorerItemTitles } from './replace'
 import { fileResolver, cacheResolver, allCacheResolver } from './testing'
+import { eventEmitter } from './events'
 
 export default class HeadingsOverhaulPlugin extends Plugin {
 
@@ -12,15 +13,30 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 		await loadSettings(this)
 		this.addSettingTab(new SettingsTab(this))
 		
-		app.workspace.onLayoutReady(async () => 
-		{
-			this.registerEvent(this.app.workspace.on('layout-change', () => {}))
-			this.registerEvent(this.app.workspace.on('active-leaf-change', () => {}))
-			this.registerEvent(this.app.workspace.on('file-open', () => {}))	
-			this.registerEvent(this.app.metadataCache.on('changed', async file => {}))
+		app.workspace.onLayoutReady(async () => {
 			
+			this.registerEvent(this.app.workspace.on('layout-change', () => { 
+				eventEmitter.emit('layoutChange') 
+			}))
+			
+			this.registerEvent(this.app.workspace.on('active-leaf-change', async leaf => { 
+				eventEmitter.emit('activeLeafChange', leaf) 
+			}))
+			
+			this.registerEvent(this.app.workspace.on('file-open', async file => {
+				eventEmitter.emit('fileOpen', file)
+			}))	
+			
+			this.registerEvent(this.app.metadataCache.on('changed', async file => { 
+				eventEmitter.emit('metadataChanged', file) 
+			}))
+			
+			this.registerEvent(this.app.vault.on('rename', async (file, oldFilePath) => { 
+				eventEmitter.emit('fileRename', {newFilePath: file.path, oldFilePath}) 
+			}))
+
 			await this.populateCache()
-			await this.moduleManager(true)
+			// await this.allModuleManager(true)
 		})
 		
 		// this.addCommand({id: 'test-command', name: 'command for executing test functions', callback: () => { testFunction() }})
@@ -28,19 +44,17 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 	}
 
 	async onunload(): Promise<void> {
-		await this.moduleManager(false)
+		// await this.allModuleManager(false)
 		console.log(`Disabled HeadingsOverhaulPlugin: "${Date.now()}"`)
 	}
 
-	private async moduleManager(state: boolean) {
+	// private async allModuleManager(state: boolean) {
 		// load or unload all available modules
-
-		if (settings.setTabTitles) await setTabTitles(state)
+		// if (settings.setTabTitles) await setTabTitles(state)
 		// if (settings.setExplorerTitles) await setExplorerTitles(state)
 		// if (settings.setGraphTitles) await 
 		// if (settings.setLinkSuggestionTitles)
-
-	}
+	// }
 
 	private async populateCache(): Promise<void> {
     	const files = app.vault.getMarkdownFiles()
@@ -49,10 +63,10 @@ export default class HeadingsOverhaulPlugin extends Plugin {
 		}
 	}
 
-	private async reloadTabTitle(file: TAbstractFile): Promise<void> {
-		if (settings.replaceTabs && isFileIndexable(file.path)) {
-			await cacheManager.addToLiveCache(file.path)
-			await setTabTitles(true, true, file.path)
-		}
-	}
+	// private async reloadTabTitle(file: TAbstractFile): Promise<void> {
+	// 	if (settings.replaceTabs && isFileIndexable(file.path)) {
+	// 		await cacheManager.addToLiveCache(file.path)
+	// 		await setTabTitles(true, true, file.path)
+	// 	}
+	// }
 }
