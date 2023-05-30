@@ -50,9 +50,7 @@ So, I think I'll continue work here. I plan on indexing and caching the first he
 
 Afterwards, I'll have to somehow display the results as needed. And create an api which would take in `path` (folder/example.md) and resolve `heading` ('example heading`).
 
----
-
-https://github.com/pjeby/hot-reload
-
----
-
+### References
+1. [snezhig/obsidian-front-matter-title: Plugin for Obsidian.md](https://github.com/snezhig/obsidian-front-matter-title)
+2. [scambier/obsidian-omnisearch: A search engine that "just works" for Obsidian. Includes OCR and PDF indexing.](https://github.com/scambier/obsidian-omnisearch)
+3. [pjeby/hot-reload: Automatically reload Obsidian plugins in development when their files are changed](https://github.com/pjeby/hot-reload)
