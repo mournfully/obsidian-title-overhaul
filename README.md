@@ -1,5 +1,11 @@
 # Headings Overhaul Plugin
 
+Obsidian events supports dynamically adding and removing listeners (https://docs.obsidian.md/Reference/TypeScript+API/Events/Events). The on() function returns a EventRef that you can store and later pass into offref() to remove the listener.
+
+*BRUH, I just reinvented this by making my own EventEmitter. That is it, I need a break.*
+
+---
+
 > **Warning**
 > This codebase is currently under heavy development, and should not be used.
 > However, if you'd like to work with this codebase instead. I'd recommend inspecting the following commit(s): [b527](https://github.com/mournfully/replace-title-with-header/commit/b52745f7ea6a2309132494a0f3b660dd645d521f), [ef62](https://github.com/mournfully/replace-title-with-header/commit/ef62319ef3d0fd04bca5f80d94f5e477107b4a65)
