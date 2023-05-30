@@ -2,7 +2,9 @@
 
 > **Warning**
 > This codebase is currently under heavy development, and should not be used.
-> However, if you'd like to work with this codebase instead. I'd recommend inspecting the following commit(s): [b527](https://github.com/mournfully/replace-title-with-header/commit/b52745f7ea6a2309132494a0f3b660dd645d521f) 
+> However, if you'd like to work with this codebase instead. I'd recommend inspecting the following commit(s): [b527](https://github.com/mournfully/replace-title-with-header/commit/b52745f7ea6a2309132494a0f3b660dd645d521f), [ef62](https://github.com/mournfully/replace-title-with-header/commit/ef62319ef3d0fd04bca5f80d94f5e477107b4a65)
+
+![](./docs/showcase.png)
 
 I found the following thread [^1] on the obsidian forum and all the recommended plugins to be quite helpful when I first encountered this problem.
 
