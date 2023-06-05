@@ -1,4 +1,4 @@
-import { eventEmitter } from "./events"
+// import { eventEmitter } from "../src/events"
 
 eventEmitter.on("layoutChange", () => {
     console.log("layoutChange")

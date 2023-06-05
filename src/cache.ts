@@ -1,3 +1,7 @@
+/**
+ * Defines a cache manager for the plugin
+ */
+
 import { IndexedDocument } from "./utils"
 
 export async function indexDocument(path: string): Promise<IndexedDocument> {
