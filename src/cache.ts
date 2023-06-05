@@ -33,9 +33,7 @@ class HeadingsOverhaulCache {
 		try {
 			const file = await indexDocument(path)
 			if (!file.path) {
-				console.error(
-					`Skipping addToLiveCache for "${path}" because of missing IndexedDocument.path`
-				)
+				console.error(`Skipping addToLiveCache for "${path}" because of missing IndexedDocument.path`)
 				return
 			}
 			this.liveCache.set(path, file)
