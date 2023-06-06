@@ -1,6 +1,6 @@
 import { Plugin, PluginSettingTab, Setting } from 'obsidian'
 import type HeadingsOverhaulPlugin from './main'
-import { setTabTitles, setExplorerItemTitles } from './replace'
+import { tabTitles } from './set/tabs'
 
 // Init setting variable type
 export interface HeadingsOverhaulSettings {
@@ -48,8 +48,8 @@ export class SettingsTab extends PluginSettingTab {
       .addToggle(toggle =>
         toggle.setValue(settings.setTabTitles).onChange(async v => {
           settings.setTabTitles = v
-          setTabTitles(settings.setTabTitles, false, null)
           await saveSettings(this.plugin)
+          settings.setTabTitles ? tabTitles.enable() : tabTitles.disable()
         })
       )
 
@@ -59,7 +59,7 @@ export class SettingsTab extends PluginSettingTab {
       .addToggle(toggle =>
         toggle.setValue(settings.replaceExplorer).onChange(async v => {
           settings.replaceExplorer = v
-          setExplorerItemTitles(settings.replaceExplorer)
+          // setExplorerItemTitles(settings.replaceExplorer)
           await saveSettings(this.plugin)
         })
       )
